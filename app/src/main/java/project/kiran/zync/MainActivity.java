@@ -35,7 +35,20 @@ public class MainActivity extends AppCompatActivity {
         numberOfContacts.setText(String.valueOf(contactCount));
         TextView contactText = (TextView) findViewById(R.id.numberText);
         overrideFonts(getApplicationContext(),contactText,"Thin");
+        TextView exportButton = (TextView) findViewById(R.id.exportButton);
+        exportButton.setOnClickListener(exportContacts);
+        overrideFonts(getApplicationContext(),exportButton,"Regular");
+        TextView syncButton = (TextView) findViewById(R.id.syncButton);
+        overrideFonts(getApplicationContext(),syncButton,"Thin");
     }
+    View.OnClickListener exportContacts = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dataWriter dw = new dataWriter();
+            dw.setFile("contacts.json");
+            String rfile = dw.getFile(getApplicationContext());
+        }
+    };
     private class mainCount extends AsyncTask<String,String,String>{
 
         @Override
