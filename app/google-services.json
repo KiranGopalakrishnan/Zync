@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "612446919821",
+    "firebase_url": "https://zync-4ea4f.firebaseio.com",
+    "project_id": "zync-4ea4f",
+    "storage_bucket": "zync-4ea4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612446919821:android:dfd860a1e0964f04",
+        "android_client_info": {
+          "package_name": "project.kiran.zync"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612446919821-2op9uoi1vhmf4ias5j66k0i0n4rfpled.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "project.kiran.zync",
+            "certificate_hash": "B91819AEAC91EE33090A1E1A0C60669B1A0E5C87"
+          }
+        },
+        {
+          "client_id": "612446919821-cvu7ci20elabm8gl4isakkohgko7g5o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3n2lGfKAtUsu4NZvn3cOar28Mi9fwZkY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612446919821-cvu7ci20elabm8gl4isakkohgko7g5o8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
