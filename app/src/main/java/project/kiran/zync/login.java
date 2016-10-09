@@ -1,6 +1,7 @@
 package project.kiran.zync;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import static android.R.attr.data;
 
 public class login extends AppCompatActivity implements View.OnClickListener {
 GoogleApiClient mGoogleApiClient;
@@ -83,6 +89,26 @@ GoogleApiClient mGoogleApiClient;
 
     @Override
     public void onClick(View v) {
+
+    }
+    private class signIn extends AsyncTask<String,String,String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url= "http://anoudis.com/users/core/register.php";
+            serverRequest lp = null;
+            String result = "";
+            try {
+                lp = new serverRequest(url);
+                String email;
+                lp.addFormField("email",params[0]);
+                result = lp.finish();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Log.i("Response  : ",result.toString());
+            return  result.toString();
+        }
 
     }
 

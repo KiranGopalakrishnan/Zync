@@ -37,45 +37,17 @@ public class MainActivity extends AppCompatActivity {
         overrideFonts(getApplicationContext(),contactText,"Thin");
         TextView exportButton = (TextView) findViewById(R.id.exportButton);
         exportButton.setOnClickListener(exportContacts);
-        overrideFonts(getApplicationContext(),exportButton,"Regular");
+        overrideFonts(getApplicationContext(),exportButton,"Thin");
         TextView syncButton = (TextView) findViewById(R.id.syncButton);
         overrideFonts(getApplicationContext(),syncButton,"Thin");
     }
     View.OnClickListener exportContacts = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            dataWriter dw = new dataWriter();
-            dw.setFile("contacts.json");
-            String rfile = dw.getFile(getApplicationContext());
+
         }
     };
-    private class mainCount extends AsyncTask<String,String,String>{
 
-        @Override
-        protected String doInBackground(String... params) {
-           /* String url= "http://anoudis.com/users/core/register.php";
-            serverRequest lp = new serverRequest();
-            String cname,cnumber,id;
-            cname=params[0].get(i);
-            cnumber=params[1];
-            id=params[3];
-            HashMap<String, String> data = new HashMap<String,String>();
-            data.put("email",username);
-            data.put("password", password);
-            data.put("sex",sex);
-            data.put("dob", dob);
-            data.put("accountType", "U");
-            data.put("firstname",firstname);
-            data.put("lastname", lastname);
-
-            String result = lp.sendRequest(url, data);
-
-            //Log.i("Response  : ",result.toString());
-            return  result.toString();*/
-            return null;
-        }
-
-    }
     private void overrideFonts(final Context context, final View v, String Style) {
         try {
             if (v instanceof ViewGroup) {
