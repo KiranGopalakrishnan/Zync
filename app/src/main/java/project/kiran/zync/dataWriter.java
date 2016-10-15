@@ -27,7 +27,9 @@ public class dataWriter {
     public static String getFile(Context context){
         return (context.getFilesDir().getPath() + "/" + fileName).toString();
     }///method to get the filename in which the data is to be written --P.S filename with extension
-
+    public static void deleteFile(File file){
+        file.delete();
+    }
     public static void saveData(Context context, String mJsonResponse) { //method to save data
         try {
             FileWriter fileW = new FileWriter(context.getFilesDir().getPath() + "/" + fileName,false);
@@ -67,14 +69,6 @@ public class dataWriter {
             it.remove(); // avoids a ConcurrentModificationException
         }
 
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.put(jObj);
-        JSONObject mainObj = new JSONObject();
-        try {
-            mainObj.put(objName,jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return mainObj;
+        return jObj;
     }
 }
