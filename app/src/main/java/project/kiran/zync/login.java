@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +42,9 @@ GoogleApiClient mGoogleApiClient;
     Activity act;
     WebView loading;
     ImageView signInButton;
+    String deviceName = "My Device";
     private static final int RC_SIGN_IN = 0;
+    String UUID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +53,40 @@ GoogleApiClient mGoogleApiClient;
         overrideFonts(getApplicationContext(),txthint,"Thin");
         getSupportActionBar().hide();
         signInButton = (ImageView) findViewById(R.id.sign_in_button);
-        signInButton.setVisibility(View.INVISIBLE);
-        loading = (WebView)findViewById(R.id.loader);
-        loading.loadUrl("file:///android_asset/loading.gif");
-        loading.setBackgroundColor(Color.TRANSPARENT);
-        loading.setVisibility(View.VISIBLE);
+        //signInButton.setVisibility(View.INVISIBLE);
+        //loading = (WebView)findViewById(R.id.loader);
+        //loading.loadUrl("file:///android_asset/loading.gif");
+        //loading.setBackgroundColor(Color.TRANSPARENT);
+        //loading.setVisibility(View.VISIBLE);
         context = getApplicationContext();
-        new loadApp().execute();
+        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        String deviceId = deviceUuid.toString();
+        UUID = deviceId;
+
+        // Configure sign-in to request the user's ID, email address, and basic
+// profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+// Build a GoogleApiClient with access to the Google Sign-In API and the
+// options specified by gso.
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .enableAutoManage(login.this /* FragmentActivity */, fListener /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        findViewById(R.id.sign_in_button).setOnClickListener(signInListener);
+        //loading.setVisibility(View.INVISIBLE);
+        //signInButton.setVisibility(View.VISIBLE);
+
+       // loadApp ap = new loadApp();
+        //ap.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
     View.OnClickListener signInListener =  new View.OnClickListener() {
@@ -95,16 +125,10 @@ GoogleApiClient mGoogleApiClient;
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             String email = acct.getEmail();
-            final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+            deviceName = android.os.Build.MODEL;
+            Log.d("MODELHA",deviceName);
+            String[] params = {email,UUID,deviceName};
 
-            final String tmDevice, tmSerial, androidId;
-            tmDevice = "" + tm.getDeviceId();
-            tmSerial = "" + tm.getSimSerialNumber();
-            androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-            UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-            String deviceId = deviceUuid.toString();
-            String[] params = {email,deviceId};
             new signIn().execute(params);
             //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             //updateUI(true);
@@ -124,26 +148,12 @@ GoogleApiClient mGoogleApiClient;
         @Override
         protected String doInBackground(String... params) {
 
-            // Configure sign-in to request the user's ID, email address, and basic
-// profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build();
-// Build a GoogleApiClient with access to the Google Sign-In API and the
-// options specified by gso.
-            mGoogleApiClient = new GoogleApiClient.Builder(context)
-                    .enableAutoManage(login.this /* FragmentActivity */, fListener /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
 
             return null;
         }
         @Override
         protected void onPostExecute(String result) {
 
-            findViewById(R.id.sign_in_button).setOnClickListener(signInListener);
-            loading.setVisibility(View.INVISIBLE);
-            signInButton.setVisibility(View.VISIBLE);
 
         }
     }
@@ -152,19 +162,20 @@ GoogleApiClient mGoogleApiClient;
 
         @Override
         protected String doInBackground(String... params) {
-            String url= "https://anoudis.com/levels8.com/signIn.php";
+            String url= "http://levels8.com/zync/signIn.php";
             serverRequest lp = null;
             String result = "";
             try {
                 lp = new serverRequest(url);
                 String email;
                 lp.addFormField("email",params[0]);
-                lp.addFormField("device",params[1]);
+                lp.addFormField("UUID",params[1]);
+                lp.addFormField("deviceName",params[2]);
                 result = lp.finish();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("Response  : ",result.toString());
+            Log.d("HAHAHA",result.toString());
             return  result.toString();
         }
         @Override
@@ -176,7 +187,10 @@ GoogleApiClient mGoogleApiClient;
                 String userId = jo.get("userId").toString();
                 Session session = new Session(getApplicationContext());
                 session.setUserId(userId);
+                session.setDeviceId(UUID);
                 session.setLogin();
+                Intent i = new Intent(login.this,MainActivity.class);
+                startActivity(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

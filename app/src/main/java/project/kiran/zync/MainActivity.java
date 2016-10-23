@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         numberOfContacts.setText(String.valueOf(contactCount));
         TextView contactText = (TextView) findViewById(R.id.numberText);
         overrideFonts(getApplicationContext(),contactText,"Thin");
-        TextView exportButton = (TextView) findViewById(R.id.exportButton);
-        exportButton.setOnClickListener(exportContacts);
+        //TextView exportButton = (TextView) findViewById(R.id.exportButton);
+        //exportButton.setOnClickListener(exportContacts);
 
 
-        overrideFonts(getApplicationContext(),exportButton,"Thin");
+       // overrideFonts(getApplicationContext(),exportButton,"Thin");
         TextView syncButton = (TextView) findViewById(R.id.syncButton);
 
         syncButton.setOnClickListener(syncBack);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to execute after dialog
-                            Intent i = new Intent(MainActivity.this,syncWithDevice.class);
+                            Intent i = new Intent(MainActivity.this,devices.class);
                             startActivity(i);
                         }
                     });

@@ -44,7 +44,6 @@ public class sendPost {
                 OutputStreamWriter osWriter = new OutputStreamWriter(os, "UTF-8");
                 BufferedWriter writer = new BufferedWriter(osWriter);
                 writer.write(getPostData(values));
-
                 writer.flush();
                 writer.close();
                 os.close();

@@ -20,6 +20,10 @@ public class Session {
     public void setUserId(String usename) {
         prefs.edit().putString("userId", usename).commit();
     }
+    public void setDeviceId(String device) {
+        prefs.edit().putString("deviceId", device).commit();
+    }
+
     public void setLatitude(String usename) {
         prefs.edit().putString("latitude", usename).commit();
     }
@@ -37,6 +41,10 @@ public class Session {
         String usename = prefs.getString("userId","");
         return usename;
     }
+    public String getDeviceId() {
+        String device = prefs.getString("deviceId","");
+        return device;
+    }
     public String setLogin() {
         prefs.edit().putString("loggedIn", "true").commit();
         return "true";
@@ -47,6 +55,7 @@ public class Session {
         }else{
 
             Intent i = new Intent(cxt, login.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             cxt.startActivity(i);
             return false;
         }

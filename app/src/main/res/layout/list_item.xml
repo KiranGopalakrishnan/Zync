@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
     android:id="@+id/listContain"
-    android:paddingLeft="10dp"
-    android:paddingBottom="10dp" >
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+    android:paddingLeft="10dp" >
     <ImageView
         android:id="@+id/icon"
         android:layout_width="60dp"
@@ -19,7 +19,7 @@
         android:layout_toRightOf="@+id/icon"
         android:layout_centerVertical="true"
         android:paddingLeft="15dp"
-        android:textColor="#999999"
+        android:textColor="#000000"
         android:textSize="15dp" />
 
     <TextView

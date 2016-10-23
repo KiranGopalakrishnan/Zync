@@ -62,12 +62,12 @@ public class customListViewAdapter extends ArrayAdapter<RowItem> {
 
         //      holder.txtDesc.setText(rowItem.getDesc());
         holder.txtTitle.setText(rowItem.getTitle());
-        if(rowItem.getDiscount()!=" ") {
+       /* if(rowItem.getDiscount()!=" ") {
             holder.Di.setText(rowItem.getDiscount() + "% OFF ");
         }else{
             holder.Di.setVisibility(View.INVISIBLE);
-        }
-        //holder.Container.setTag(R.id.businessId,rowItem.getId());
+        }*/
+        //holder.Container.setTag(R.id.listContain,rowItem.getItemId());
       //  holder.imageView.setImageBitmap(createBitmap(context, rowItem.getTitle()));
         // holder.Container.setTag(rowItem.getId());
 

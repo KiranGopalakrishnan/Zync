@@ -45,7 +45,6 @@
         android:gravity="center"
         android:textSize="18sp"
         android:padding="10sp"
-        android:layout_marginTop="20sp"
         android:layout_below="@+id/name"
         android:textColor="#FFFFFF"
         android:id="@+id/txtHint" />
@@ -64,17 +63,10 @@
         android:layout_alignLeft="@id/name"
         android:layout_alignStart="@id/name"
         android:gravity="center"
-        android:layout_marginTop="15sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:padding="10dp">
-        <WebView
-            android:layout_width="64sp"
-            android:layout_height="64sp"
-            android:padding="10sp"
-            android:layout_gravity="center"
-            android:id="@+id/loader"></WebView>
         <ImageView
             android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"

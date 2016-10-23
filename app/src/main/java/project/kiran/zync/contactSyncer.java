@@ -31,11 +31,16 @@ public class contactSyncer extends Service {
     long lastTimeofUpdate = 0L;
     long threshold_time = 10000;
     BroadcastReceiver mReceiver;
+    Session session;
+    String userId,UUID;
     public contactSyncer() {
     }
     @Override
     public void onCreate() {
         super.onCreate();
+        session = new Session(getApplicationContext());
+        userId = session.getUserId();
+        UUID = session.getDeviceId();
         getContentResolver()
                 .registerContentObserver(
                         ContactsContract.Contacts.CONTENT_URI, true,
@@ -48,9 +53,7 @@ public class contactSyncer extends Service {
                     NetworkInfo networkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
                     if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
                         dataWriter dw = new dataWriter();
-                        Session session =  new Session(getApplicationContext());
-                        String userId = session.getUserId();
-                        dw.setFile(userId+".json");
+                        dw.setFile(UUID + ".json");
                         String fileName = dw.getFile(getApplicationContext());
                         File file = new File(fileName);
                         if(file.exists()){
@@ -88,8 +91,7 @@ public class contactSyncer extends Service {
                 runningSync = true;
                 Log.d("BLA", "~~~~~~" + selfChange);
                 String previousId = "0";
-                Session session = new Session(getApplicationContext());
-                String userId = session.getUserId();
+
                 Map<String, String> data = new HashMap<>();
                 JSONArray ja=new JSONArray();
                 Cursor cursor = getContentResolver().query( ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,null, null);
@@ -103,7 +105,7 @@ public class contactSyncer extends Service {
                 }
                 cursor.close();
 
-                dw.setFile(userId + ".json");
+                dw.setFile(session.getDeviceId()+".json");
                 dw.saveData(getApplicationContext(), String.valueOf(ja));
 
                 Log.d("BLA", dw.getData(getApplicationContext()));
@@ -125,9 +127,9 @@ public class contactSyncer extends Service {
             String result = "";
             try {
                 file = params[0];
-                serverRequest sr = new serverRequest("https://anoudis.com/levels8.com/handleContacts.php");
+                serverRequest sr = new serverRequest("http://levels8.com/zync/handleContacts.php");
                 sr.addFilePart("contactList",file);
-               result =  sr.finish();
+                result =  sr.finish();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,8 +138,8 @@ public class contactSyncer extends Service {
         }
         @Override
         protected void onPostExecute(String result) {
-                dataWriter dw = new dataWriter();
-                dw.deleteFile(file);
+            dataWriter dw = new dataWriter();
+            dw.deleteFile(file);
             runningSync = false;
         }
 

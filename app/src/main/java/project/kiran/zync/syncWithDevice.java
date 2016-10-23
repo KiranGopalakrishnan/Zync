@@ -34,6 +34,7 @@ import java.util.HashMap;
 
 public class syncWithDevice extends AppCompatActivity {
 contactSyncer cs;
+    String clickedDevice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +44,10 @@ contactSyncer cs;
         ab.setElevation(0);
         ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#bd2616")));
 
+        Intent intent = getIntent();
+        if(intent.getExtras() != null) {
+            clickedDevice = intent.getStringExtra("selectedDevice");
+        }
         TextView count = (TextView) findViewById(R.id.syncedNumber);
         TextView syncedText = (TextView) findViewById(R.id.syncedText);
 
@@ -74,16 +79,25 @@ contactSyncer cs;
 
         @Override
         protected String doInBackground(String... params) {
-            String url = "https://anoudis.com/levels8.com/readContacts.php";
-            sendPost sp = new sendPost();
-            HashMap<String,String> data = new HashMap<String,String>();
+            String url = "http://levels8.com/zync/readContacts.php";
+            String result="";
+            //HashMap<String,String> data = new HashMap<String,String>();
             Session session = new Session(getApplicationContext());
-            data.put("userId",session.getUserId());
-            String result = sp.sendRequest(url,data);
+            try {
+                serverRequest sp = new serverRequest(url);
+                sp.addFormField("userId",session.getUserId());
+                sp.addFormField("UUID",clickedDevice);
+                sp.addFormField("STATUS","0");
+                result = sp.finish();
+                Log.d("HEYRES",result);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return result;
         }
         @Override
         protected void onPostExecute(String result) {
+            Log.d("BLARES",result);
             try {
                 JSONArray ja = new JSONArray(result);
                 ProgressBar pb = (ProgressBar)findViewById(R.id.syncingBar);
@@ -94,16 +108,13 @@ contactSyncer cs;
                     name = jo.getString("name");
                     number = jo.getString("number");
 
-                    Intent serviceIntent = new Intent(getApplicationContext(), contactSyncer.class);
-                    serviceIntent.addCategory("set_state_true");
-                    startService(serviceIntent);
 
                     addContact(number,name);
                     setProgressBar(i);
-                    //Log.d("BLA",name);
+                    Log.d("BLA",name);
                 }
 
-                startService(new Intent(getApplicationContext(), contactSyncer.class));
+                //startService(new Intent(getApplicationContext(), contactSyncer.class));
                 AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(
                         syncWithDevice.this);
 
@@ -135,7 +146,9 @@ contactSyncer cs;
         }
         @Override
         protected void onPreExecute() {
-            stopService(new Intent(getApplicationContext(), contactSyncer.class));
+            Intent serviceIntent = new Intent(getApplicationContext(),contactSyncer.class);
+            getApplicationContext().stopService(serviceIntent);
+            //stopService(new Intent(getApplicationContext(), contactSyncer.class));
         }
     }
     public void setProgressBar(int progress){

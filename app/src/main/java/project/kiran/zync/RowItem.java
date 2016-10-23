@@ -13,16 +13,16 @@ public class RowItem {
     private Boolean defaultIcon_nf;
     private String id;
 
-    public RowItem(String title,String discount,String id) {
+    public RowItem(String title,String id) {
         this.title = title;
-        this.discount=discount;
+        //this.discount=discount;
         this.id=id;
     }
     public void setDefault()
     {
 
     }
-    public String getId(){
+    public String getItemId(){
         return this.id;
     }
     public int getImageId() {
@@ -38,7 +38,7 @@ public class RowItem {
     public void setDesc(String desc) {
         this.desc = desc;
     }
-    public void setId(String id){this.id=id;}
+    public void setItemId(String id){this.id=id;}
     public String getTitle() {
         return title;
     }
@@ -46,12 +46,12 @@ public class RowItem {
         this.title = title;
     }
 
-    public String getDiscount() {
+    /*public String getDiscount() {
         return discount;
     }
     public void setDiscount(String discount) {
         this.discount = discount;
-    }
+    }*/
     public Boolean getDefault() {
         return this.defaultIcon_nf;
     }
